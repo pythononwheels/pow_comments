@@ -1,0 +1,36 @@
+{% extends "base.tmpl" %}
+
+{% block content %}
+    <!-- Begin page content -->
+    <div class="container">
+      <div class="m-t-1">
+        <h1> Congratulations</h1> 
+        <p class="lead"> and welcome to your new PythonOnWheels Application !<p>
+      </div>
+      <p class="lead">
+        <h5>Next steps:</h5>
+        <ul>
+          <li>Add a model. <code>generate_model(modelname)</code></li>
+          <li>Init the migration environment. <code>python init_migrations.py</code></li>
+          <li>create the migration for the post Model<code>pyhton generate_migration post</code></li>
+          <li>Update the DB<code>python update-db.py</code></li>
+          <li>Add a handler. <code>generate_handler(modelname)</code></li>
+          <li>The server should restart automatically.</li>
+          <li>Switch to. <code>http://localhost:8080/modelname</code></li>
+        </ul>
+      </p>
+     
+      <p class="lead">
+        <h5>Additionally you should:</h5>
+        <ul>
+          <li>Watch the getting started video ~ 15 Minutes</li>
+          <li>Read and code one of the app tutorials. (15 Minutes)</li>
+          <ul>
+            <li>Todo list with Tags [relations: tree, has_many, Web views, validation]</li>
+            <li>Blog [File upload, simple authentication, Has_many</li>
+            <li>Twitter clone [websockets, react.js views]</li>
+          </ul>
+        </ul>
+      </p>
+    </div>
+{% end %}
