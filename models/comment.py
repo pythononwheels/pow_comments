@@ -1,16 +1,20 @@
 #
-# Model {{model_class_name}}
+# Model Comment
 #
 from sqlalchemy import Column, Integer, String, Boolean, Sequence
 from sqlalchemy import BigInteger, Date, DateTime, Float, Numeric
-from {{appname}}.powlib import relation
-from {{appname}}.dblib import Base 
+from pow_comments.powlib import relation
+from pow_comments.dblib import Base 
 
 #@relation.has_many("<plural_other_models>")
-#@relation.setup_schema()
-class {{model_class_name}}(Base):
+@relation.tree()
+@relation.setup_schema()
+class Comment(Base):
     #
-    # column definitions: sqlalchemy classic style
+    # put your column definition here:
+    #
+    # 
+    # sqlalchemy classic style
     # which offer you all sqlalchemy options
     #
     #title = Column(String(50))
@@ -22,13 +26,12 @@ class {{model_class_name}}(Base):
     #
     schema = {
         # string sqltypes can be TEXT or UNICODE or nothing
-        'name': {'type': 'string', 'maxlength' : 35},
+        'author': {'type': 'string', 'maxlength' : 35},
         'text': {'type': 'string'}
     }
 
     # init
     def __init__(self, **kwargs):
         self.init_on_load(**kwargs)
-    #
-    # your model's methods down here
-    #
+
+    # your methods down here

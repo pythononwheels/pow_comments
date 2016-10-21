@@ -4,7 +4,7 @@
 import os
 import alembic.config
 import sys
-from test.dblib import engine
+from pow_comments.dblib import engine
 from alembic.config import Config
 from alembic import command
 import argparse
