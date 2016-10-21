@@ -42,7 +42,7 @@ myapp = {
 
 database = {
     "type"      :   "sqlite",
-    "dbname"    :   r"c:\khz\devel\pow_comments\sql.db",
+    "dbname"    :   r"sql.db",   # better leave the r to enable absolute paths with backslashes 
     "host"      :   None,       
     "port"      :   None,   
     "user"      :   None,
