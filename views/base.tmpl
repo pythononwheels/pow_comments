@@ -45,28 +45,66 @@
         <p class="lead">The quick and simple generative Webframework for python.</p>
         <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
       </div>
+      <!-- START THE FEATURETTES -->
 
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-lg-4">
-          <h2>Safari bug warning!</h2>
-          <p class="text-danger">As of v9.0, Safari exhibits a bug in which resizing your browser horizontally causes rendering errors in the justified nav that are cleared upon refreshing.</p>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+      <!--hr class="featurette-divider" -->
+      <div class="row featurette">
+        <div class="col-md-2">
+          &nbsp;
         </div>
-        <div class="col-lg-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
-       </div>
-        <div class="col-lg-4">
-          <h2>Heading</h2>
-          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
-          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+        <div class="col-md-8">
+             <h2 class="featurette-heading">Everything you need on board <span class="text-muted">Batteries included.</span></h2>
+                <p class="lead">
+                  With PythonOnWheels you need no extra tools to start. Everything from DB to Webserver and template engine is included.
+                  But you are not forced to use them and can go raw or include your own tools whenever you want.
+                </p>
+                
 
+                <ul> 
+                <li>python 3.x</li>
+                <li>tornado webserver</li>
+                <li>sqlalchemy ORM</li>
+                <li>cerberus schemas and validation on board</li>
+                <li>react.js views</li>
+                <li>tornado templates</li>
+                </ul>
+          </div>
+          <div class="col-md-2">
+          &nbsp;
+        </div>
+      <div class="row featurette">
+        <div class="col-md-6">
+          <h2 class="featurette-heading">Everything you need on board <span class="text-muted">Batteries included.</span></h2>
+          <p class="lead">
+            With PythonOnWheels you need no extra tools to start. Everything from DB to Webserver and template engine is included.
+            But you are not forced to use them and can go raw or include your own tools whenever you want.
+          </p>
+        </div>
+          <div class="col-md-6">
+          <p>&nbsp;</p>
+
+          <ul> 
+          <li>python 3.x</li>
+          <li>tornado webserver</li>
+          <li>sqlalchemy ORM</li>
+          <li>cerberus schemas and validation on board</li>
+          <li>react.js views</li>
+          <li>tornado templates</li>
+          </ul>
+
+          
         </div>
       </div>
-      <pre><code class="language-python">
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-5 push-md-7">
+          <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
+          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+        </div>
+        <div class="col-md-7 pull-md-5">
+           <pre><code class="language-python">
             @relation.tree()
             @relation.setup_schema()
             class Comment(Base):
@@ -88,6 +126,63 @@
 
 
           </code></pre>
+          
+          
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
+          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+        </div>
+        <div class="col-md-5">
+          <h3>Super easy, quick to start and all the basics on board:</h3>
+          </ul>
+          <li>super easy relations with decorators @relations.has_many("comments")</li>
+          <li>super easy REST routing with decorators @app.add\_restful\_routes(), </li>
+          <li>routing decorator @app.add_route(route)</li>
+          <li>db migrations autogenerated usin alembic in the back </li>
+          <li>validation on board with cerberus schemas</li>
+          <li>automatic scaffolding views</li>
+          <li>generate_models script</li>
+          <li>generate_migrations script </li>
+          <li>update_db script</li>
+          <li>generate_handlers </li>
+          <li>generate_app</li>
+          </ul>
+          <img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <!-- /END THE FEATURETTES -->
+      
+
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-lg-4">
+          <h2>Safari bug warning!</h2>
+          <p class="text-danger">As of v9.0, Safari exhibits a bug in which resizing your browser horizontally causes rendering errors in the justified nav that are cleared upon refreshing.</p>
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-lg-4">
+          <h2>Heading</h2>
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+       </div>
+        <div class="col-lg-4">
+          <h2>Heading</h2>
+          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
+          <p><a class="btn btn-primary" href="#" role="button">View details &raquo;</a></p>
+
+        </div>
+      </div>
+      
       <!-- Site footer -->
       {% include "footer.tmpl" %}
 
