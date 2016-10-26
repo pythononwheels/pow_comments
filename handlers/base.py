@@ -48,6 +48,7 @@ class BaseHandler(tornado.web.RequestHandler):
         if callable(before_handler):
             print("calling before_handler for " +  str(self.__class__))
             before_handler()
+        self.format = None
 
     def get_current_user(self):
         """
@@ -76,12 +77,13 @@ class BaseHandler(tornado.web.RequestHandler):
         if format_param in myapp["supported_formats"]:
             return format_param
         else:
-            self.error(
-                    {
-                        "format" : format_param,
+            print("format error")
+            return self.error(
+                    message="Format not supported. (see data.format)",
+                    data={
+                        "format was" : format_param,
                         "supported_formats" : myapp["supported_formats"]
-                    }, 
-                    "Format not supported. (see data.format)"
+                    }
                 )
 
 
@@ -122,6 +124,11 @@ class BaseHandler(tornado.web.RequestHandler):
             #       (you have to handle the URL parameters yourself) CASE 6
             # or if param2 is given we take this as the result format.
             #
+            if str(params.get("param1", None)).lower() not in ["new", "search", "page"]:
+                #it is a format or an error
+                self.format = self.get_accept_format(params.get("param1"))
+                print("self format is:" +str(self.format))
+                return self.index()
             if str(params.get("param1", None)).lower() == "new":
                 self.format = self.get_accept_format(params.get("param2"))
                 return self.new()
@@ -193,6 +200,8 @@ class BaseHandler(tornado.web.RequestHandler):
         """
         if not format:
             format = self.format
+        if not format:
+            format = myapp["default_format"]
         self.set_status(http_code)
         if encoder:
             encoder = encoder
@@ -208,10 +217,13 @@ class BaseHandler(tornado.web.RequestHandler):
         self.finish()
 
     def error(self, message=None, data=None, succ=None, prev=None,
-        http_code=500, format=None):
+        http_code=500, format=None, encoder=None):
         self.set_status(http_code)
+        
         if not format:
             format = self.format
+        if not format:
+            format = myapp["default_format"]
         if encoder:
             encoder = encoder
         else:

@@ -9,7 +9,7 @@ import os
 import os.path
 import sys
 
-from pow_comments.config import server_settings as app_settings
+from pow_comments.config import server_settings 
 from pow_comments.powlib import merge_two_dicts
 from pow_comments.application import Application
 
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     print(50*"-")
     print("starting the pow server Server ")
     print(50*"-")
-    print("visit: https://localhost:" + str(app_settings["port"]))
+    print("visit: https://localhost:" + str(server_settings["port"]))
     print("  DB: " + str(app.settings["db"]))
     #app.listen(app_settings["port"], **server_settings)#
     #app=Application()
@@ -45,5 +45,5 @@ if __name__ == "__main__":
         print("#"+str(idx)+": " + str(elem.regex) + " --> " + str(elem.handler_class))
 
     http_server = tornado.httpserver.HTTPServer(app)
-    http_server.listen(app_settings["port"])
+    http_server.listen(server_settings["port"])
     tornado.ioloop.IOLoop.instance().start()
