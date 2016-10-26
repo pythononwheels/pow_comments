@@ -15,7 +15,7 @@ def get_class_name(name):
         test => Test
         testone => Testone
     """
-    print("class_name: " + "".join([c.capitalize() for c in name.split("_")]))
+    #print("class_name: " + "".join([c.capitalize() for c in name.split("_")]))
     return "".join([c.capitalize() for c in name.split("_")])
 
 
@@ -313,8 +313,8 @@ class powDecNew():
             # parent is the parent class of the relation
             cls_name = cls.__name__.lower()
             #print(cls_name)
-            setattr(cls, "parent_id", Column(Integer, ForeignKey(pluralize(cls_name)+".id")))
-            setattr(cls, "children", relationship(cls_name.capitalize()))
+            setattr(cls, "tree_parent_id", Column(Integer, ForeignKey(pluralize(cls_name)+".id")))
+            setattr(cls, "tree_children", relationship(cls_name.capitalize()))
             ##print(dir(rel))
             print("RELATION: I see a tree: " + cls_name.capitalize() )
             return cls
@@ -328,7 +328,7 @@ class powDecNew():
     # 
     def setup_schema(self, what=""):
         def decorator(cls):
-            print("in setup_schema:" + cls.__name__.lower())
+            print("setup_schema:" + cls.__name__.lower())
             #print("what: " + what)
             #print("schema is: " + str(cls.schema))
             #

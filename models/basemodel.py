@@ -7,21 +7,19 @@ from pow_comments.powlib import pluralize
 import datetime
 from sqlalchemy import orm
 import sqlalchemy.inspection
-import cerberus
+from cerberus import Validator
 import xmltodict
 import json
 
-# class PowValidator(cerberus.Validator):
-#     def _validate_sqltype(self, field, value):
-#         """ SQLtypeonly for internal use
-#             and forwarding to SQLAlchemy
-#             THis test is only a pseudofunc to make
-#             cerberus accept the sqlprecision parameter
 
-#         The rule's arguments are validated against this schema:
-#         {'type': 'string'}
-#         """
-#         return True
+class MyValidator(Validator):
+    def _validate_type_default(self, value):
+        """ Enables validation for `objectid` schema attribute.
+        :param value: field value.
+        """
+        print(" validating: default value: " + str(value))
+        return True
+
 
 #print ('importing module %s' % __name__)
 class BaseModel():
@@ -54,14 +52,28 @@ class BaseModel():
             )
         setattr(self, "_jsonify", jschema_class())
         self.session=session
+        self.table = self.metadata.tables[pluralize(self.__class__.__name__.lower())]
+        
         #
         # if there is a schema (cerberus) set it in the instance
         #
         if (getattr(self, "schema", False)) and ("schema" in self.__class__.__dict__):
+            print(" .. found a sdhema for: " +str(self.__class__.__name__))
             self.schema = self.__class__.__dict__["schema"]
         else:
             #print("No schema attribute found for this Model Class")
-            self.schema = {}
+            self.schema = None
+             # 
+            # setup a schema from the columns:
+            #
+            print(" .. setup schema from sql: ")
+            for col in self.table.columns.items():
+                # looks like this: 
+                # ('id', 
+                #  Column('id', Integer(), table=<comments>, primary_key=True, 
+                #     nullable=False))
+                col_type = col[1].type.python_type
+                print(str(col_type))
         #
         # setup values from kwargs or from init_from_<format> if format="someformat"
         #
@@ -78,7 +90,7 @@ class BaseModel():
             for key in kwargs.keys():
                 if key in self.__class__.__dict__:
                     setattr(self, key, kwargs[key])
-        self.table = self.metadata.tables[pluralize(self.__class__.__name__.lower())]
+        
 
     @declared_attr
     def __tablename__(cls):
@@ -91,7 +103,8 @@ class BaseModel():
         """
         if getattr(self,"schema", False):
             # if instance has a schema. (also see init_on_load)
-            v = cerberus.Validator(self.schema)
+            #v = cerberus.Validator(self.schema)
+            v= MyValidator(self.schema)
             if v.validate(self.dict_dump()):
                 return True
             else:
@@ -150,7 +163,7 @@ class BaseModel():
 
     def dict_dump(self):
         d = {}
-        exclude_list=["_jsonify","_sa_instance_state", "session", "schema"]
+        exclude_list=["_jsonify","_sa_instance_state", "session", "schema", "table", "tree_parent_id", "tree_children"]
         if getattr(self, "exclude_list", False):
             exclude_list += self.exclude_list
         for elem in vars(self).keys():
