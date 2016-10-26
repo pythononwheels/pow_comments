@@ -58,9 +58,9 @@
                   With PythonOnWheels you need no extra tools to start. Everything from DB to Webserver and template engine is included.
                   But you are not forced to use them and can go raw or include your own tools whenever you want.
                 </p>
-                
-
-                <ul> 
+                 
+                <h3> Based on a very Strong foundation: </h3>
+                <ul>
                 <li>python 3.x</li>
                 <li>tornado webserver</li>
                 <li>sqlalchemy ORM</li>
@@ -68,67 +68,50 @@
                 <li>react.js views</li>
                 <li>tornado templates</li>
                 </ul>
+        </div>
+        <div class="col-md-2">
+          &nbsp;
+        </div>
+      </div>
+      <div class="row featurette">
+        <div class="col-md-2">
+          &nbsp;
+        </div>
+        <div class="col-md-8">
+            <hr class="featurette-divider">
+              <h2 class="featurette-heading">Probably the most simple SQL relations and RESTrouting out there! <span class="text-muted"> (Flask like routing included as well) .</span></h2>
+                <p class="lead">
+                  With PythonOnWheels you simply add a class decorator like <code>@relation.has_many("comments") </code> to the Post model and every Post can have comments. It will 
+                  be automatically mapped to the DB (SQLite, Postgres, MySQL, MariaDb, Oracle, MSSQL ...) and to all Models.
+                  Additionally you can set RESTroutes by simply add the class decorator: <code>@app.add_rest_routes("post") </code>to add all the typical RESTroutes for the Post model.
+                </p>
+                <pre><code class="language-python">
+                    @relation.has_many("comments")
+                    @relation.setup_schema()
+                    class Post(Base):
+                          #
+                          # Schema definition with the new (cerberus) schema style 
+                          # which offer you immediate validation 
+                          #
+                          schema = {
+                              # string sqltypes can be TEXT or UNICODE or nothing
+                              'author': {'type': 'string', 'maxlength' : 35},
+                              'title': {'type': 'string'},
+                              'text': {'type': 'string'}
+                          }
+
+                          # init
+                          def __init__(self, **kwargs):
+                              self.init_on_load(**kwargs)
+
+                          # your methods down here
+
+
+                </code></pre>
           </div>
           <div class="col-md-2">
           &nbsp;
-        </div>
-      <div class="row featurette">
-        <div class="col-md-6">
-          <h2 class="featurette-heading">Everything you need on board <span class="text-muted">Batteries included.</span></h2>
-          <p class="lead">
-            With PythonOnWheels you need no extra tools to start. Everything from DB to Webserver and template engine is included.
-            But you are not forced to use them and can go raw or include your own tools whenever you want.
-          </p>
-        </div>
-          <div class="col-md-6">
-          <p>&nbsp;</p>
-
-          <ul> 
-          <li>python 3.x</li>
-          <li>tornado webserver</li>
-          <li>sqlalchemy ORM</li>
-          <li>cerberus schemas and validation on board</li>
-          <li>react.js views</li>
-          <li>tornado templates</li>
-          </ul>
-
-          
-        </div>
-      </div>
-
-      <hr class="featurette-divider">
-
-      <div class="row featurette">
-        <div class="col-md-5 push-md-7">
-          <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
-          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-        </div>
-        <div class="col-md-7 pull-md-5">
-           <pre><code class="language-python">
-            @relation.tree()
-            @relation.setup_schema()
-            class Comment(Base):
-                  #
-                  # Schema definition with the new (cerberus) schema style 
-                  # which offer you immediate validation 
-                  #
-                  schema = {
-                      # string sqltypes can be TEXT or UNICODE or nothing
-                      'author': {'type': 'string', 'maxlength' : 35},
-                      'text': {'type': 'string'}
-                  }
-
-                  # init
-                  def __init__(self, **kwargs):
-                      self.init_on_load(**kwargs)
-
-                  # your methods down here
-
-
-          </code></pre>
-          
-          
-        </div>
+          </div>
       </div>
 
       <hr class="featurette-divider">
