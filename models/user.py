@@ -1,7 +1,7 @@
 #
 # Model
 #
-from sqlalchemy import Column, Integer, String, Sequence, Text
+from sqlalchemy import *
 from pow_comments.powlib import relation
 from pow_comments.dblib import Base 
 
@@ -9,6 +9,8 @@ from pow_comments.dblib import Base
 class User(Base):
     login = Column(String)
     password = Column(String)
+    num = Column(Numeric)
+    bin = Column(LargeBinary)
     #email = Column(String)
     #test = Column(Text)
     

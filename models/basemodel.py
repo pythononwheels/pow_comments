@@ -10,7 +10,7 @@ import sqlalchemy.inspection
 from cerberus import Validator
 import xmltodict
 import json
-
+import datetime, decimal
 
 class MyValidator(Validator):
     def _validate_type_default(self, value):
@@ -33,6 +33,7 @@ class BaseModel():
     created_at = Column(DateTime, default=func.now())
     last_updated = Column(DateTime, onupdate=datetime.datetime.now, default=func.now())
     session = session
+    schema = {}
 
     @orm.reconstructor
     def init_on_load(self, *args, **kwargs):
@@ -58,22 +59,67 @@ class BaseModel():
         # if there is a schema (cerberus) set it in the instance
         #
         if (getattr(self, "schema", False)) and ("schema" in self.__class__.__dict__):
-            print(" .. found a sdhema for: " +str(self.__class__.__name__))
+            print(" .. found a schema for: " +str(self.__class__.__name__))
             self.schema = self.__class__.__dict__["schema"]
         else:
             #print("No schema attribute found for this Model Class")
-            self.schema = None
-             # 
+            #self.schema = None
+            # 
             # setup a schema from the columns:
             #
             print(" .. setup schema from sql: ")
-            for col in self.table.columns.items():
+            for idx,col in enumerate(self.table.columns.items()):
                 # looks like this: 
                 # ('id', 
                 #  Column('id', Integer(), table=<comments>, primary_key=True, 
                 #     nullable=False))
                 col_type = col[1].type.python_type
-                print(str(col_type))
+                col_name = str(col[0]).lower()
+                exclude_list = [elem for elem in self.schema.keys()]
+                exclude_list.append( ["id", "created_at", "last_updated"] )
+                print("    #" + str(idx) + "->" + str(col_name) + " -> " + str(col_type))
+                # dont check internal columns or relation columns.
+                if ( col_name not in exclude_list ) and ( col[1].foreign_keys != set() ):   
+                    if col_type == int:
+                        # sqlalchemy: Integer, BigInteger
+                        # cerberus: integer
+                        pass
+                    elif col_type == str:
+                        # sqlalchemy: String, Text
+                        # cerberus: string
+                        # python: str
+                        pass
+                    elif col_type == bool:
+                        # sqlalchemy: Boolean
+                        # cerberus: boolean
+                        # python: bool
+                        pass
+                    elif col_type == datetime.date:
+                        # sqlalchemy: Date
+                        # cerberus: date
+                        # python: datetime.date
+                        pass
+                    elif col_type == datetime.datetime:
+                        # sqlalchemy: DateTime
+                        # cerberus: datetime
+                        # python: datetime.datetime
+                        pass
+                    elif col_type == float:
+                        # sqlalchemy: Float
+                        # cerberus: float
+                        # python: float
+                        pass
+                    elif col_type == decimal.Decimal:
+                        # sqlalchemy: Numeric
+                        # cerberus: number
+                        # python: decimal.Decimal
+                        pass
+                    elif col_type == bytes:
+                        # sqlalchemy: LargeBinary
+                        # cerberus: binary
+                        # python: bytes
+                        pass
+
         #
         # setup values from kwargs or from init_from_<format> if format="someformat"
         #
