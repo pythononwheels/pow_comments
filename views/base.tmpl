@@ -21,6 +21,7 @@
     
     <link href="{{ static_url("css/justified-nav.css") }}" rel="stylesheet">
     <link href="{{ static_url("css/prism.css") }}" rel="stylesheet">
+    <link href="{{ static_url("css/pow.css") }}" rel="stylesheet">
     {% block css %}
       
     {% end %}
@@ -42,8 +43,12 @@
       <div class="jumbotron">
         <img src={{ static_url("images/pow_logo_300.png") }}  style="display: inline-block;" />
            <hr>
-        <p class="lead">The quick and simple generative Webframework for python.</p>
-          <p><a class="btn btn-lg btn-success" href="#" role="button">Get started today</a></p>
+        <p class="lead">The quick and easy generative Webframework for python.</p>
+        <p>
+          <a class="btn btn-lg btn-success" href="#" role="button">Take the tutorial</a>
+          <a class="btn btn-lg btn-info" href="#" role="button">Read the docs</a>
+        </p>
+
       </div>
       <!-- START THE FEATURETTES -->
 
@@ -53,7 +58,7 @@
           &nbsp;
         </div>
         <div class="col-md-8">
-             <h2 class="featurette-heading">Everything you need on board <span class="text-muted">Batteries included.</span></h2>
+             <h2 class="featurette-heading">Everything you need on board. <span class="text-muted">Batteries included.</span></h2>
                 <p class="lead">
                   With PythonOnWheels you need no extra tools to start. Everything from DB to Webserver and template engine is included.
                   But you are not forced to use them and can go raw or include your own tools whenever you want.
@@ -73,18 +78,25 @@
           &nbsp;
         </div>
       </div>
-      
+
+
+      <hr class="featurette-divider">
+
+
       <div class="row featurette">
         <div class="col-md-2">
           &nbsp;
         </div>
+
         <div class="col-md-8">
-            <hr class="featurette-divider">
-              <h2 class="featurette-heading">Probably the most simple SQL relations out there! <span class="text-muted"> RESTrouting see below.</span></h2>
+
+              <h2 class="featurette-heading">Probably the most simple SQL relations out there! <span class="text-muted">Based on sqlalchemy.</span></h2>
+
                 <p class="lead">
                   With PythonOnWheels you simply add a class decorator like <code>@relation.has_many("comments") </code> to the Post model and every Post can have comments. It will 
-                  be automatically mapped to the DB (SQLite, Postgres, MySQL, MariaDb, Oracle, MSSQL ...) and to all Models.
-                  Additionally you can set RESTroutes by simply add the class decorator: <code>@app.add_rest_routes("post") </code>to add all the typical RESTroutes for the Post model.
+                  be automatically mapped to the DB (SQLite, Postgres, MySQL, MariaDb, Oracle, MSSQL ...) and to all related Models.
+                  
+
                 </p>
                 <p class="lead">
                   Here is a typical pow model using a cerberus schema definition.
@@ -97,25 +109,25 @@
                   </ul>
                 </p>
                 <pre><code class="language-python">
-                    @relation.has_many("comments")
-                    @relation.setup_schema()
-                    class Post(Base):
-                          #
-                          # Schema definition with the new (cerberus) schema style 
-                          # which offer you immediate validation 
-                          #
-                          schema = {
-                              # string sqltypes can be TEXT or UNICODE or nothing
-                              'author': {'type': 'string', 'maxlength' : 35},
-                              'title': {'type': 'string'},
-                              'text': {'type': 'string'}
-                          }
+@relation.has_many("comments")
+@relation.setup_schema()
+class Post(Base):
+      #
+      # Schema definition with the new (cerberus) schema style 
+      # which offer you immediate validation 
+      #
+      schema = {
+          # string sqltypes can be TEXT or UNICODE or nothing
+          'author': {'type': 'string', 'maxlength' : 35},
+          'title': {'type': 'string'},
+          'text': {'type': 'string'}
+      }
 
-                          # init
-                          def __init__(self, **kwargs):
-                              self.init_on_load(**kwargs)
+      # init
+      def __init__(self, **kwargs):
+          self.init_on_load(**kwargs)
 
-                          # your methods down here
+      # your methods down here
 
 
                 </code></pre>
@@ -181,6 +193,7 @@
       <div class="row featurette">
         <div class="col-md-2">
           &nbsp;
+
         </div>
         <div class="col-md-8">
           <h2 class="featurette-heading">And finally: a super easy workflow.<span class="text-muted"> Quick to start and all the basics on board:</span></h2>
@@ -223,17 +236,97 @@
         </div>
         <div class="col-md-2">
           &nbsp;
+
         </div>
+
+
+        <div class="col-md-8">
+            
+              <h2 class="featurette-heading">Probably the most simple RESTrouting out there! <span class="text-muted"></span></h2>
+                <p class="lead">
+                  With PythonOnWheels you simply add a class decorator like <code>@app.add_rest_routes("ROUTENAME") </code> to the according handler 
+                  and all the typical RESTroutes for <code>create, read, update, delete</code> will be generated for you.
+                  Of course mapped to the right HTTP verbs (GET, POST, PUT, DELETE)
+                </p>
+                <pre><code class="language-python">
+@app.add_rest_routes("comment")
+class commentHandler(BaseHandler):
+
+# 
+# every pow handler automatically gets these RESTful routes
+# thru the @app.add_rest_routes() decorator.
+#
+# 1  GET    /comment        #=> index
+# 2  GET    /comment/1      #=> show
+# 3  GET    /comment/new    #=> new
+# 4  GET    /comment/1/edit #=> edit 
+# 5  GET    /comment/page/1 #=> page
+# 6  GET    /comment/search #=> search
+# 7  PUT    /comment/1      #=> update
+# 8  POST   /comment        #=> create
+# 9  DELETE /comment/1      #=> destroy
+#
+
+# standard supported http methods are:
+# SUPPORTED_METHODS = ("GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
+# you can overwrite any of those directly or leave the @add_rest_routes out to have a basic 
+# handler.
+
+def show(self, id=None):
+    m=Comment()
+    res=m.find_one(Comment.id==id)
+    self.success(message="Comment show", data=res.json_dump())
+
+def index(self):
+    m=Comment()
+    res = m.find_all(as_json=True)
+    self.success(message="Comment, index", data=res)         
+
+def page(self, page=0):
+    m=Comment()
+    page_size=myapp["page_size"]
+    if database["type"] == "sqlite":
+        limit=page_size
+    else:
+        limit=(page*page_size)+page_size
+    res = m.find_all(as_json=True, 
+        limit=limit,
+        offset=page*page_size
+        )
+    self.success(message="Comment page: #" +str(page), data=res )  
+
+@tornado.web.authenticated
+def edit(self, id=None):
+    self.success(message="Comment, edit id: " + str(id))
+
+@tornado.web.authenticated
+def new(self):
+    self.success("Comment, new")
+
+@tornado.web.authenticated
+def create(self):
+    self.success(message="Comment, create")
+
+@tornado.web.authenticated
+def update(self, id=None):
+    self.success("Comment, update id: " + str(id))
+
+@tornado.web.authenticated
+def destroy(self, id=None):
+    self.success("Comment, destroy id: " + str(id))
+
+                </code></pre>
+          </div>
+          <div class="col-md-2">
+          &nbsp;
+          </div>
       </div>
 
-     
+      <!--hr class="featurette-divider" -->
+
 
       <!-- /END THE FEATURETTES -->
-      
 
-      <!-- Example row of columns -->
-      
-      
       <!-- Site footer -->
       {% include "footer.tmpl" %}
 

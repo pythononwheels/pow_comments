@@ -67,58 +67,8 @@ class BaseModel():
             # 
             # setup a schema from the columns:
             #
-            print(" .. setup schema from sql: ")
-            for idx,col in enumerate(self.table.columns.items()):
-                # looks like this: 
-                # ('id', 
-                #  Column('id', Integer(), table=<comments>, primary_key=True, 
-                #     nullable=False))
-                col_type = col[1].type.python_type
-                col_name = str(col[0]).lower()
-                exclude_list = [elem for elem in self.schema.keys()]
-                exclude_list.append( ["id", "created_at", "last_updated"] )
-                print("    #" + str(idx) + "->" + str(col_name) + " -> " + str(col_type))
-                # dont check internal columns or relation columns.
-                if ( col_name not in exclude_list ) and ( col[1].foreign_keys != set() ):   
-                    if col_type == int:
-                        # sqlalchemy: Integer, BigInteger
-                        # cerberus: integer
-                        pass
-                    elif col_type == str:
-                        # sqlalchemy: String, Text
-                        # cerberus: string
-                        # python: str
-                        pass
-                    elif col_type == bool:
-                        # sqlalchemy: Boolean
-                        # cerberus: boolean
-                        # python: bool
-                        pass
-                    elif col_type == datetime.date:
-                        # sqlalchemy: Date
-                        # cerberus: date
-                        # python: datetime.date
-                        pass
-                    elif col_type == datetime.datetime:
-                        # sqlalchemy: DateTime
-                        # cerberus: datetime
-                        # python: datetime.datetime
-                        pass
-                    elif col_type == float:
-                        # sqlalchemy: Float
-                        # cerberus: float
-                        # python: float
-                        pass
-                    elif col_type == decimal.Decimal:
-                        # sqlalchemy: Numeric
-                        # cerberus: number
-                        # python: decimal.Decimal
-                        pass
-                    elif col_type == bytes:
-                        # sqlalchemy: LargeBinary
-                        # cerberus: binary
-                        # python: bytes
-                        pass
+            self.setup_schema_from_sql()
+            
 
         #
         # setup values from kwargs or from init_from_<format> if format="someformat"
@@ -140,8 +90,70 @@ class BaseModel():
 
     @declared_attr
     def __tablename__(cls):
+        """ returns the tablename for this model """
         return pluralize(cls.__name__.lower())
 
+
+    def setup_schema_from_sql(self):
+        """
+            Constructs a cerberus definition schema 
+            from a given sqlalchemy column definition
+            for this model.
+        """
+        print(" .. setup schema from sql: ")
+        for idx,col in enumerate(self.table.columns.items()):
+            # looks like this: 
+            # ('id', 
+            #  Column('id', Integer(), table=<comments>, primary_key=True, 
+            #     nullable=False))
+            col_type = col[1].type.python_type
+            col_name = str(col[0]).lower()
+            exclude_list = [elem for elem in self.schema.keys()]
+            exclude_list.append( ["id", "created_at", "last_updated"] )
+            print("    #" + str(idx) + "->" + str(col_name) + " -> " + str(col_type))
+            # dont check internal columns or relation columns.
+            if ( col_name not in exclude_list ) and ( col[1].foreign_keys != set() ):   
+                if col_type == int:
+                    # sqlalchemy: Integer, BigInteger
+                    # cerberus: integer
+                    pass
+                elif col_type == str:
+                    # sqlalchemy: String, Text
+                    # cerberus: string
+                    # python: str
+                    pass
+                elif col_type == bool:
+                    # sqlalchemy: Boolean
+                    # cerberus: boolean
+                    # python: bool
+                    pass
+                elif col_type == datetime.date:
+                    # sqlalchemy: Date
+                    # cerberus: date
+                    # python: datetime.date
+                    pass
+                elif col_type == datetime.datetime:
+                    # sqlalchemy: DateTime
+                    # cerberus: datetime
+                    # python: datetime.datetime
+                    pass
+                elif col_type == float:
+                    # sqlalchemy: Float
+                    # cerberus: float
+                    # python: float
+                    pass
+                elif col_type == decimal.Decimal:
+                    # sqlalchemy: Numeric
+                    # cerberus: number
+                    # python: decimal.Decimal
+                    pass
+                elif col_type == bytes:
+                    # sqlalchemy: LargeBinary
+                    # cerberus: binary
+                    # python: bytes
+                    pass
+
+                
     def validate(self):
         """
             checks if the instance has a schema.
