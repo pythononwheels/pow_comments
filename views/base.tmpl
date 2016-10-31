@@ -95,9 +95,20 @@
                 <p class="lead">
                   With PythonOnWheels you simply add a class decorator like <code>@relation.has_many("comments") </code> to the Post model and every Post can have comments. It will 
                   be automatically mapped to the DB (SQLite, Postgres, MySQL, MariaDb, Oracle, MSSQL ...) and to all related Models.
-                  
-
                 </p>
+                <p>
+                  Supported relation types are:
+                  <hr>
+                  <ul>
+                    <li><code>@relation.has_many("comments")</code>(decorated class has many comments.)</li>
+                    <li><code>@relation.many_to_many("comments")</code>(decorated class has many to many with comments)</li>
+                    <li><code>@relation.belongs_to("comments")</code>(decorated class belongs to comments.)</li>
+                    <li><code>@relation.one_to_one("comments")</code>(decorated class has one to one with comments)</li>
+                    <li><code>@relation.tree()</code> (decorated class has adjacence list (is a tree))</li>
+                  </ul>
+                </p>
+                <p>For details of the implementation see <a href="http://docs.sqlalchemy.org/en/latest/orm/relationships.html">
+                sqlalchemy relation documentation</a></p>
                 <p class="lead">
                   Here is a typical pow model using a cerberus schema definition.
                   <ul>
@@ -137,115 +148,21 @@ class Post(Base):
           </div>
       </div>
 
-      <div class="row featurette">
+      
+
+     
+      <hr class="featurette-divider">
+     <div class="row featurette">
         <div class="col-md-2">
           &nbsp;
         </div>
         <div class="col-md-8">
-            <hr class="featurette-divider">
-              <h2 class="featurette-heading">Probably the most simple RESTrouting out there <span class="text-muted"> Flask like routing included as well.</span></h2>
+              <h2 class="featurette-heading">Probably the most simple RESTrouting out there! <span class="text-muted">Flask like direct routes included as well.</span></h2>
                 <p class="lead">
                   With PythonOnWheels you simply add a class decorator like <code>@app.add_rest_routes("base") </code> 
                   to your handler and you get all the typical REST routes mapped to the according CRUD methods of your 
                   handler class.
                   Additionally you can set RESTroutes by simply add the class decorator: <code>@app.add_rest_routes("post") </code>to add all the typical RESTroutes for the Post model.
-                </p>
-                <p class="lead">
-                  Here is a typical pow model using a cerberus schema definition.
-                  <ul>
-                    <li>the <code>@relation.setup_schema() </code> decorator will map this schema to a vaild
-                    sqlalchemy column definition set.</li>
-                    <li>the model will also automatically get all the right Foreign_Keys and python attributes to
-                    create a has_many relationship to the <code> comments </code> model. 
-                    This is all done for you with the <code>@relation.has_many("comments") </code>
-                  </ul>
-                </p>
-                <pre><code class="language-python">
-                    @relation.has_many("comments")
-                    @relation.setup_schema()
-                    class Post(Base):
-                          #
-                          # Schema definition with the new (cerberus) schema style 
-                          # which offer you immediate validation 
-                          #
-                          schema = {
-                              # string sqltypes can be TEXT or UNICODE or nothing
-                              'author': {'type': 'string', 'maxlength' : 35},
-                              'title': {'type': 'string'},
-                              'text': {'type': 'string'}
-                          }
-
-                          # init
-                          def __init__(self, **kwargs):
-                              self.init_on_load(**kwargs)
-
-                          # your methods down here
-
-
-                </code></pre>
-          </div>
-          <div class="col-md-2">
-          &nbsp;
-          </div>
-      </div>
-      <hr class="featurette-divider">
-
-      <div class="row featurette">
-        <div class="col-md-2">
-          &nbsp;
-
-        </div>
-        <div class="col-md-8">
-          <h2 class="featurette-heading">And finally: a super easy workflow.<span class="text-muted"> Quick to start and all the basics on board:</span></h2>
-          <p class="lead"></p>
-          </ul>
-          <div class="row featurette">
-            <div class="col-md-1">
-            &nbsp;
-            </div>
-            <div class="col-md-10">
-            <li>generative approach (not noisy)</li>
-              <ul>
-                <li><code>generate_models script</code></li>
-                <li><code>generate_migrations script </code></li>
-                <li><code>generate_handlers</code> (handler are controllers)</li>
-                <li><code>generate_app</code></li>
-              </ul>
-              <li>super easy relations with decorators @relations.has_many("comments")</li>
-                <ul>
-                  <li><code>@has_many(), @has_one(), @one_to_one(), @tree()</code></li>
-                  <li> All the rest including foreign_keys, virtual python attributes are injected for you.</li>
-                </ul>
-              <li>super easy REST routing with decorators @app.add\_restful\_routes(), </li>
-                <ul><li><code>@app.add_rest_routes("base_route")</code></li></ul>
-              <li>flask like routing decorator @app.add_route(route)</li>
-                <ul><li><code>@app.add_route("route")</code></li></ul>
-              <li>db migrations autogenerated using alembic in the back </li>
-                <ul><li><code>generate_migration, update_db</code></li></ul>
-              <li>validation on board with cerberus schemas</li>
-                <ul><li><code>model.validate() => executes cerberus validator</code></li></ul>
-              
-              
-              </ul>
-            </div>
-            <div class="col-md-1">
-            &nbsp;
-            </div>
-          </div>
-
-        </div>
-        <div class="col-md-2">
-          &nbsp;
-
-        </div>
-
-
-        <div class="col-md-8">
-            
-              <h2 class="featurette-heading">Probably the most simple RESTrouting out there! <span class="text-muted"></span></h2>
-                <p class="lead">
-                  With PythonOnWheels you simply add a class decorator like <code>@app.add_rest_routes("ROUTENAME") </code> to the according handler 
-                  and all the typical RESTroutes for <code>create, read, update, delete</code> will be generated for you.
                   Of course mapped to the right HTTP verbs (GET, POST, PUT, DELETE)
                 </p>
                 <pre><code class="language-python">
@@ -269,8 +186,9 @@ class commentHandler(BaseHandler):
 
 # standard supported http methods are:
 # SUPPORTED_METHODS = ("GET", "HEAD", "POST", "DELETE", "PATCH", "PUT", "OPTIONS")
-# you can overwrite any of those directly or leave the @add_rest_routes out to have a basic 
-# handler.
+# you can overwrite any of those directly or leave the 
+# @add_rest_routes out to have a basic handler.
+# 
 
 def show(self, id=None):
     m=Comment()
@@ -318,12 +236,57 @@ def destroy(self, id=None):
                 </code></pre>
           </div>
           <div class="col-md-2">
-          &nbsp;
+            &nbsp;
           </div>
       </div>
 
-      <!--hr class="featurette-divider" -->
+       <hr class="featurette-divider">
 
+      <div class="row featurette">
+        <div class="col-md-2">
+          &nbsp;
+
+        </div>
+        <div class="col-md-8">
+          <h2 class="featurette-heading">And finally: a super easy workflow.<span class="text-muted"> Quick to start and all the basics on board:</span></h2>
+          <p class="lead"></p>
+          </ul>
+          <div class="row">
+            <div class="col-md-1">
+              &nbsp;
+            </div>
+            <div class="col-md-10">
+              
+              <li>generative approach (not noisy)</li>
+              
+              <ul>
+                <li><code>generate_models script</code></li>
+                <li><code>generate_migrations script </code></li>
+                <li><code>generate_handlers</code> (handler are controllers)</li>
+                <li><code>generate_app</code></li>
+              </ul>
+              <li>super easy relations with decorators @relations.has_many("comments")</li>
+                <ul>
+                  <li><code>@has_many(), @has_one(), @one_to_one(), @tree()</code></li>
+                  <li> All the rest including foreign_keys, virtual python attributes are injected for you.</li>
+                </ul>
+              <li>super easy REST routing with decorators @app.add\_restful\_routes(), </li>
+                <ul><li><code>@app.add_rest_routes("base_route")</code></li></ul>
+              <li>flask like routing decorator @app.add_route(route)</li>
+                <ul><li><code>@app.add_route("route")</code></li></ul>
+              <li>db migrations autogenerated using alembic in the back </li>
+                <ul><li><code>generate_migration, update_db</code></li></ul>
+              <li>validation on board with cerberus schemas</li>
+                <ul><li><code>model.validate() => executes cerberus validator</code></li></ul>
+              </ul>
+            </div>
+            <div class="col-md-1">
+              &nbsp;
+            </div>
+          </div>
+
+        </div>
+      </div>
 
       <!-- /END THE FEATURETTES -->
 

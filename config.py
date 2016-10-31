@@ -36,7 +36,8 @@ myapp = {
             "xml"   :   pow_comments.encoders.JsonToXml()
     },
     "page_size"         : 10,
-    "enable_authentication"     :   False   # False, simple or custom
+    "enable_authentication"     :   False,   # False, simple or custom
+    "auto_schema"   :   True
 }
 
 

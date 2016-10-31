@@ -11,6 +11,7 @@ from cerberus import Validator
 import xmltodict
 import json
 import datetime, decimal
+from pow_comments.config import myapp
 
 class MyValidator(Validator):
     def _validate_type_default(self, value):
@@ -33,7 +34,6 @@ class BaseModel():
     created_at = Column(DateTime, default=func.now())
     last_updated = Column(DateTime, onupdate=datetime.datetime.now, default=func.now())
     session = session
-    schema = {}
 
     @orm.reconstructor
     def init_on_load(self, *args, **kwargs):
@@ -45,10 +45,10 @@ class BaseModel():
         # this enables the model to load / dump json
         # 
         #print(kwargs)
-        cls_name = self.__class__.__name__.capitalize()
+        self.class_name = self.__class__.__name__.capitalize()
         from marshmallow_sqlalchemy import ModelSchema
         cls_meta=type("Meta", (object,),{"model" : self.__class__})
-        jschema_class = type(cls_name+'Schema', (ModelSchema,),
+        jschema_class = type(self.class_name+'Schema', (ModelSchema,),
             {"Meta": cls_meta}
             )
         setattr(self, "_jsonify", jschema_class())
@@ -58,15 +58,12 @@ class BaseModel():
         #
         # if there is a schema (cerberus) set it in the instance
         #
-        if (getattr(self, "schema", False)) and ("schema" in self.__class__.__dict__):
-            print(" .. found a schema for: " +str(self.__class__.__name__))
+        print(str(self.__class__.__dict__.keys()))
+        if "schema" in self.__class__.__dict__:
+            print(" .. found a schema for: " +str(self.__class__.__name__) + " in class dict")
             self.schema = self.__class__.__dict__["schema"]
-        else:
-            #print("No schema attribute found for this Model Class")
-            #self.schema = None
-            # 
-            # setup a schema from the columns:
-            #
+        # add the sqlcolumns schema definitions to the cerberus schema (if there are any)
+        if myapp["auto_schema"]:
             self.setup_schema_from_sql()
             
 
@@ -100,7 +97,7 @@ class BaseModel():
             from a given sqlalchemy column definition
             for this model.
         """
-        print(" .. setup schema from sql: ")
+        print(" .. setup schema from sql for : " + str(self.class_name))
         for idx,col in enumerate(self.table.columns.items()):
             # looks like this: 
             # ('id', 
@@ -112,7 +109,8 @@ class BaseModel():
             exclude_list.append( ["id", "created_at", "last_updated"] )
             print("    #" + str(idx) + "->" + str(col_name) + " -> " + str(col_type))
             # dont check internal columns or relation columns.
-            if ( col_name not in exclude_list ) and ( col[1].foreign_keys != set() ):   
+            if ( col_name not in exclude_list ) and ( col[1].foreign_keys != set() ): 
+                print("  .. adding to schema: " + col_name)  
                 if col_type == int:
                     # sqlalchemy: Integer, BigInteger
                     # cerberus: integer
@@ -152,6 +150,8 @@ class BaseModel():
                     # cerberus: binary
                     # python: bytes
                     pass
+            else:
+                print("  .. skipping: " + col_name )
 
                 
     def validate(self):

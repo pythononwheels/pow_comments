@@ -14,6 +14,7 @@ class User(Base):
     #email = Column(String)
     #test = Column(Text)
     
+    schema={}
     # init
     def __init__(self, **kwargs):
         self.init_on_load(**kwargs)
