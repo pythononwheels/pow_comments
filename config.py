@@ -31,7 +31,7 @@ myapp = {
     "supported_formats" :   ["json", "csv", "xml"],
     "base_url"          :   "https://localhost",
     "encoder"           :   {
-            "json"  :   json,
+            "json"  :   pow_comments.encoders.Json(ensure_ascii=False),
             "csv"   :   pow_comments.encoders.JsonToCsv(),
             "xml"   :   pow_comments.encoders.JsonToXml()
     },

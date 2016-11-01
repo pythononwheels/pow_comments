@@ -23,6 +23,11 @@ from pow_comments.models.user import User
 
 class BaseHandler(tornado.web.RequestHandler):
 
+    def initialize(self, *args, **kwargs):
+        print("  .. in initialize")
+        print(str(args))
+        print(str(kwargs))
+        
     def prepare(self):
         """
             Called at the beginning of a request before get/post/etc.

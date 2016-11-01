@@ -17,10 +17,11 @@ class ThanksHandler(BaseHandler):
     def get(self):
         self.render("thanks.tmpl")
 
-@app.add_route("/index/*", pos=-1)
+@app.add_route("/index/([0-9]+)*", pos=-1)
 @app.add_route("/", pos=-2)
 class IndexdHandler(BaseHandler):
-    def get(self):
+    def get(self, index=None):
+        print("  index:" + str(index))
         self.render("index.tmpl")
 
 @app.add_route(".*", pos=-3)

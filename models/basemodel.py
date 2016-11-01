@@ -64,7 +64,7 @@ class BaseModel():
             self.schema = self.__class__.__dict__["schema"]
         # add the sqlcolumns schema definitions to the cerberus schema (if there are any)
         if myapp["auto_schema"]:
-            self.setup_schema_from_sql()
+            self._setup_schema_from_sql()
             
 
         #
@@ -90,8 +90,24 @@ class BaseModel():
         """ returns the tablename for this model """
         return pluralize(cls.__name__.lower())
 
+    def show_api(self):
+        import inspect
+        print(50*"-")
+        print("  external API for " + self.__class__.__name__)
+        print(50*"-")
+        for elem in inspect.getmembers(self, predicate=inspect.ismethod):
+            meth = elem[0]
 
-    def setup_schema_from_sql(self):
+            if not meth.startswith("_"):
+                print("  .. " + str(elem[0]) , end="")
+                func=getattr(self,elem[0])
+                if func:
+                    print( str(func.__doc__)[0:100])
+                else:
+                    print()
+
+
+    def _setup_schema_from_sql(self):
         """
             Constructs a cerberus definition schema 
             from a given sqlalchemy column definition

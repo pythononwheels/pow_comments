@@ -203,10 +203,10 @@ class Application(tornado.web.Application):
         return decorator
 
     #
-    # the RESTful route decorator
+    # the direct route decorator
     #
     #todo
-    def add_route(self, route, pos=0):
+    def add_route(self, route, method=None, verbs=["get"], pos=0):
         """
             cls is the class that will get the given route / API route
             cls is automatically the decorated class
@@ -219,14 +219,15 @@ class Application(tornado.web.Application):
             #print("added the following routes: " + r)
             handlers=getattr(self.__class__, "handlers", None)
             handlers_tmp=getattr(self.__class__, "handlers_tmp", None)
-            handlers_tmp.append(((route,cls),pos))
+            route_tupel= (route,cls, {"method":method})
+            handlers_tmp.append((route_tupel,pos))
             if pos < 0:
                 if pos == -1:
-                    handlers.append((route,cls))
+                    handlers.append(route_tupel)
                 else:
-                    handlers.insert(len(handlers)-(pos+1),(route,cls))
+                    handlers.insert(len(handlers)-(pos+1),route_tupel)
             elif pos >= 0:
-                handlers.insert(pos,(route,cls))
+                handlers.insert(pos,route_tupel)
             
             #print("handlers: " + str(self.handlers))
             print("ROUTING: added route for: " + cls.__name__ +  ": " + route)
