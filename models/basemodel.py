@@ -123,7 +123,7 @@ class BaseModel():
             col_name = str(col[0]).lower()
             exclude_list = [elem for elem in self.schema.keys()]
             exclude_list.append( ["id", "created_at", "last_updated"] )
-            print("    #" + str(idx) + "->" + str(col_name) + " -> " + str(col_type))
+            #print("    #" + str(idx) + "->" + str(col_name) + " -> " + str(col_type))
             # dont check internal columns or relation columns.
             if ( col_name not in exclude_list ) and ( col[1].foreign_keys != set() ): 
                 print("  .. adding to schema: " + col_name)  

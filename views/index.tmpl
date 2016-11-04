@@ -132,6 +132,9 @@ class Post(Base):
                   handler class.
 
                 </p>
+                <p>
+                By the way: this is what <code>generate_handler</code> generates for you.
+                </p>
                 <pre><code class="language-python">
 @app.add_rest_routes("comment")
 class commentHandler(BaseHandler):
@@ -236,13 +239,13 @@ class ThanksHandler(BaseHandler):
             </div>
             <div class="col-md-10">
               
-              <li>generative approach (not noisy)</li>
+              <li>generative approach (but not noisy)</li>
               
               <ul>
+                <li><code>generate_app</code></li>
                 <li><code>generate_models script</code></li>
                 <li><code>generate_migrations script </code></li>
                 <li><code>generate_handlers</code> (handler are controllers)</li>
-                <li><code>generate_app</code></li>
               </ul>
               <li>super easy relations with decorators @relations.has_many("comments")</li>
                 <ul>
