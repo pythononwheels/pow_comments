@@ -8,7 +8,7 @@ import sys
 
 from pow_comments.config import server_settings as app_settings
 from pow_comments.powlib import merge_two_dicts
-from pow_comments.dblib import Base, session, engine
+from pow_comments.dblib import Base, Session, engine
 
 from pow_comments.config import routes
 from tornado.log import access_log
@@ -51,24 +51,24 @@ class Application(tornado.web.Application):
             Base=Base
         ) , app_settings)
         super(Application, self).__init__(self.handlers, **settings)
-        self.session = session
+        self.Session = Session
         self.engine = engine
         self.Base = Base
 
-    @classmethod
-    def log(self, message="", mode=logging.INFO):
-        """ 
-            custom log method
-            access_log is importef from tornado.log (http://www.tornadoweb.org/en/stable/_modules/tornado/log.html)
-            access_log = logging.getLogger("tornado.access")
-        """
-        if mode == logging.ERROR:
-             log_method = access_log.error
-        elif mode == logging.WARNING:
-            log_method = access_log.warning
-        else:
-            log_method = access_log.info
-        log_method("%s %s", datetime.datetime.now().isoformat(), message)
+    # @classmethod
+    # def log(self, message="", mode=logging.INFO):
+    #     """ 
+    #         custom log method
+    #         access_log is importef from tornado.log (http://www.tornadoweb.org/en/stable/_modules/tornado/log.html)
+    #         access_log = logging.getLogger("tornado.access")
+    #     """
+    #     if mode == logging.ERROR:
+    #          log_method = access_log.error
+    #     elif mode == logging.WARNING:
+    #         log_method = access_log.warning
+    #     else:
+    #         log_method = access_log.info
+    #     log_method("%s %s", datetime.datetime.now().isoformat(), message)
 
     def log_request(self, handler):
         """ 
@@ -216,11 +216,11 @@ class Application(tornado.web.Application):
         def decorator(cls):
             # parent is the parent class of the relation
             cls_name = cls.__name__.lower()
-            #print("added the following routes: " + r)
             handlers=getattr(self.__class__, "handlers", None)
             handlers_tmp=getattr(self.__class__, "handlers_tmp", None)
-            route_tupel= (route,cls, {"method":method})
+            route_tupel= (route,cls, {"method":method, "verbs" : verbs})
             handlers_tmp.append((route_tupel,pos))
+            #print("added the following routes: " + route_tupel)
             if pos < 0:
                 if pos == -1:
                     handlers.append(route_tupel)

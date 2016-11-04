@@ -12,7 +12,7 @@ import sys
 from pow_comments.config import server_settings 
 from pow_comments.powlib import merge_two_dicts
 from pow_comments.application import Application
-
+#from pow_comments.application import app
 app=Application()
 if __name__ == "__main__":
 

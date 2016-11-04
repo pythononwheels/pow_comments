@@ -25,8 +25,22 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def initialize(self, *args, **kwargs):
         print("  .. in initialize")
-        print(str(args))
-        print(str(kwargs))
+        print("  .. .. args: " + str(args))
+        print("  .. .. kwargs: " + str(kwargs))
+        if "method" in kwargs.keys():
+            # direct route
+            print("  ..  .. direct route.")
+            self.dispatch = {
+                "method"    :   kwargs.get("method", None),
+                "verbs"     :   kwargs.get("verbs", [])
+            }
+        else:
+            self.dispatch = {
+                "method"    :   "rest",
+                "verbs"     :   []
+            }
+           
+
         
     def prepare(self):
         """
@@ -91,10 +105,7 @@ class BaseHandler(tornado.web.RequestHandler):
                     }
                 )
 
-
-    def get(self, **params):
-        #url_params=self.get_arguments("id")
-        #params["url"] = url_params
+    def dispatch_rest_route(self, **params):
         # GET    /items         #=> index    CASE 1
         # GET    /items/1       #=> show     CASE 2
         # GET    /items/1/edit  #=> edit     CASE 3 
@@ -158,6 +169,32 @@ class BaseHandler(tornado.web.RequestHandler):
                 self.index()
                 
         return self.error(500, params, "You didnt match any of the supported REST routes ....")
+
+    #
+    # GET
+    #
+    def get(self, *args, **params):
+        #url_params=self.get_arguments("id")
+        print("  .. GET params : " + str(params))
+        print("  .. GET args : " + str(args))
+        if self.dispatch["method"] == "rest":
+            # route a rest_route: @app.add_rest_route("base_name")
+            return self.dispatch_rest_route(**params)
+        else:
+            # route a direct route: @app.add_route("/regex/", method="name", verbs=["get"])
+            if "get" in self.dispatch["verbs"]:
+                # only proceed if this route is valid for this request verb
+                f=getattr(self, self.dispatch["method"])
+                print(str(f))
+                if callable(f):
+                    # call the given method
+                    return f(*args, **params)
+            else:
+                self.error(
+                    message=" HTTP Method: GET not supported for this route. ",
+                    data = { "request" : str(self.request )},
+                    http_code = 405
+                    )
 
         self.write(params)
     
