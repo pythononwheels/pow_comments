@@ -184,11 +184,22 @@ class BaseHandler(tornado.web.RequestHandler):
             # route a direct route: @app.add_route("/regex/", method="name", verbs=["get"])
             if "get" in self.dispatch["verbs"]:
                 # only proceed if this route is valid for this request verb
-                f=getattr(self, self.dispatch["method"])
-                print(str(f))
-                if callable(f):
-                    # call the given method
-                    return f(*args, **params)
+                try:
+                    f=getattr(self, self.dispatch["method"])
+                    print(str(f))
+                    if callable(f):
+                        # call the given method
+                        return f(*args, **params)
+                except TypeError:
+                    self.application.log_event(self, 
+                        message="""method was None. But you also did not implement
+                        one of the to standard HTTP methods (get,put ...)""")
+                    self.error(
+                    message="""method was None. But you also did not implement
+                        one of the to standard HTTP methods (get,put ...)""",
+                    data = { "request" : str(self.request )},
+                    http_code = 405
+                    )
             else:
                 self.error(
                     message=" HTTP Method: GET not supported for this route. ",

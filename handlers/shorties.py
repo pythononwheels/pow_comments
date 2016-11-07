@@ -16,6 +16,9 @@ class DashboardHandler(BaseHandler):
 # if you specify a method, this method will be called for this route
 @app.add_route("/thanks/([0-9]+)*", method="testme")
 class ThanksHandler(BaseHandler):
+    def get(self):
+        self.render("thanks.tmpl")
+        
     def testme(self,index=0 ):
         print("  .. in testme: index = " + str(index))
         self.render("thanks.tmpl", index=index)

@@ -70,7 +70,7 @@ class Application(tornado.web.Application):
     #         log_method = access_log.info
     #     log_method("%s %s", datetime.datetime.now().isoformat(), message)
 
-    def log_request(self, handler):
+    def log_request(self, handler, message=None):
         """ 
             custom log method
             access_log is importef from tornado.log (http://www.tornadoweb.org/en/stable/_modules/tornado/log.html)
@@ -90,7 +90,10 @@ class Application(tornado.web.Application):
         #log_method("%d %s %.2fms", handler.get_status(),
         #           handler._request_summary(), request_time)
         log_method("%s %d %s %.2fms", handler.request.remote_ip, handler.get_status(),
-                   handler._request_summary(), request_time)
+                handler._request_summary(), request_time)
+        if message:
+            log_method("%s %d %s", handler.request.remote_ip, handler.get_status(), str(message))
+
     
     def import_all_handlers(self):
         """

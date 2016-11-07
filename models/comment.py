@@ -26,7 +26,13 @@ class Comment(Base):
     #
     schema = {
         # string sqltypes can be TEXT or UNICODE or nothing
-        'author': {'type': 'string', 'maxlength' : 35},
+        'author': {
+            'type': 'string', 'maxlength' : 35,
+            "sql" : {
+                "primary_key" : False,
+                "default" : "No Author Name"
+            }
+        },
         'text': {'type': 'string'}
     }
 

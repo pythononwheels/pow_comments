@@ -335,7 +335,6 @@ class powDecNew():
             # create a sqlalchemy model from the schema
             #
             colclass = None
-            
             #
             # now set the right sqlalchemy type for the column
             #
