@@ -122,8 +122,9 @@ class powDecNew():
     # rel is a plural string of the related model ("adresses", "comments"
     #
     # the has many magic
-    #
-    def has_many(self, child_as_str):
+    # backref=True automatically adds a back reference in the child class
+    # ---> relationship("Parent", back_populates="children")
+    def has_many(self, child_as_str, backref=False):
         # cls is the class that has many of the related models (e.g. User, Post)
         # the "parent" class
         # rel_as_str is the plueral name of the child class (adresses, comments)
@@ -150,7 +151,8 @@ class powDecNew():
                 order_by=child_klass.id,
                 back_populates=parent_name))
             setattr(child_klass, parent_name + "_id", Column(Integer, ForeignKey(pluralize(parent_name)+".id")))
-            setattr(child_klass, parent_name, relationship(parent_class_name, back_populates=child_as_str))
+            if backref:
+                setattr(child_klass, parent_name, relationship(parent_class_name, back_populates=child_as_str))
             ##print(dir(rel))
             print("RELATION: I see a: " + parent_class_name + " has many: " + child_as_str)
             return parent_class
@@ -241,6 +243,37 @@ class powDecNew():
             print("RELATION: I see a: " + cls_name.capitalize() + " has many: " + rel_as_str)
             return cls
         return decorator
+
+    #
+    # Many to one places a foreign key in the parent table referencing the child. 
+    # relationship() is declared on the parent, where a new scalar-holding attribute 
+    # will be created
+    #
+    def many_to_one(self, child_as_str, backref=False):
+        # parent is the class that has many of the related models (e.g. User, Post)
+        # klass below is the real class instance of the child
+        def decorator(parent):
+            # parent is the parent class of the relation
+            parent_name = parent.__name__.lower()
+            #print("parent_name: " + parent_name)
+            child_class_name = singularize(child_as_str).capitalize()
+            child_module_name = singularize(child_as_str)
+            child_table_name = child_class_name.lower()
+            #print("child_class_name: " + child_class_name)
+            #print("child_module_name: " + child_module_name)
+            mod = __import__('pow_comments.models.'+child_module_name, fromlist=[child_class_name])
+            klass = getattr(mod, child_class_name)
+            #print("rel_class: " + str(klass))
+            #print(dir(klass))
+            setattr(parent, child_table_name + "_id", Column(Integer, ForeignKey(child_table_name + '.id')))
+            setattr(parent, child_table_name, relationship(child_class_name))
+            if backref:
+                setattr(klass, pluralize(parent_name), relationship(parent.__name__, back_populates=child_class_name))
+            ##print(dir(rel))
+            print("RELATION: I see a: " + parent_name.capitalize() + " many to one: " + child_as_str)
+            return parent
+        return decorator
+
     #
     # A one to many relationship places a foreign key on the child table 
     # referencing the parent. 
@@ -249,7 +282,7 @@ class powDecNew():
     #
     # usage: @relationparent
     def one_to_many(self, child_as_str):
-        # cls is the class that has many of the related models (e.g. User, Post)
+        # parent is the class that has many of the related models (e.g. User, Post)
         # klass below is the real class instance of the child
         def decorator(parent):
             # parent is the parent class of the relation

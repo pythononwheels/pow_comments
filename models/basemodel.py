@@ -13,13 +13,13 @@ import json
 import datetime, decimal
 from pow_comments.config import myapp
 
-class MyValidator(Validator):
-    def _validate_type_default(self, value):
-        """ Enables validation for `objectid` schema attribute.
-        :param value: field value.
-        """
-        print(" validating: default value: " + str(value))
-        return True
+# class MyValidator(Validator):
+#     def _validate_type_default(self, value):
+#         """ Enables validation for `objectid` schema attribute.
+#         :param value: field value.
+#         """
+#         print(" validating: default value: " + str(value))
+#         return True
 
 
 #print ('importing module %s' % __name__)
@@ -184,10 +184,12 @@ class BaseModel():
             else:
                 return v
 
-    def init_from_xml(self, data,root="root"):
+    def init_from_xml(self, data, root="root"):
         """
             makes a py dict from input xml and
             sets the instance attributes 
+            root defines the xml root node
+            
         """
         d=xmltodict.parse(data)
         d=d[root]
@@ -212,6 +214,19 @@ class BaseModel():
         for key in d:
             if key in self.__class__.__dict__:
                 setattr(self, key, d[key])
+
+    def init_from_csv(self, data):
+        """
+            makes a py dict from input ^csv and
+            sets the instance attributes 
+            csv has the drawback coompared to json (or xml)
+            that the data structure is flat.
+
+            first row must be the "column names"
+        """
+
+
+
 
     def json_dump(self):
         return self._jsonify.dump(self).data

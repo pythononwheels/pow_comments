@@ -28,9 +28,13 @@ class Comment(Base):
         # string sqltypes can be TEXT or UNICODE or nothing
         'author': {
             'type': 'string', 'maxlength' : 35,
+            # the sql "sub"key lets you declare "raw" sql(alchemy) Column options
+            # the options below are implemented so far.
             "sql" : {
                 "primary_key" : False,
-                "default" : "No Author Name"
+                "default"   : "No Author Name",
+                "unique"    : False,
+                "nullable"  : False
             }
         },
         'text': {'type': 'string'}
