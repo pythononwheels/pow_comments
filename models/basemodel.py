@@ -89,8 +89,19 @@ class BaseModel():
     def __tablename__(cls):
         """ returns the tablename for this model """
         return pluralize(cls.__name__.lower())
+    
+    def api(self):
+        """ just for conveniance """
+        return self.show_api()
 
     def show_api(self):
+        """
+            prints the "external API of the class.
+            No under or dunder methods
+            And methods only.
+
+            Uses inspect module.
+        """
         import inspect
         print(50*"-")
         print("  external API for " + self.__class__.__name__)

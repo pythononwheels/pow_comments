@@ -7,7 +7,7 @@ from pow_comments.powlib import relation
 from pow_comments.dblib import Base 
 
 #@relation.has_many("<plural_other_models>")
-@relation.tree()
+@relation.is_tree()
 @relation.setup_schema()
 class Comment(Base):
     #
@@ -33,8 +33,8 @@ class Comment(Base):
             "sql" : {
                 "primary_key" : False,
                 "default"   : "No Author Name",
-                "unique"    : False,
-                "nullable"  : False
+                "unique"    : True, 
+                "nullable"  : False 
             }
         },
         'text': {'type': 'string'}

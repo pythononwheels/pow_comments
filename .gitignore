@@ -10,6 +10,7 @@ __pycache__/
 #
 migrations/versions/
 pow.log.*
+*.db 
 
 # Distribution / packaging
 .Python
